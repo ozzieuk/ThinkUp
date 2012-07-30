@@ -81,7 +81,11 @@ class Insight {
     const EMPHASIS_LOW = 0;
     public function __construct($row = false) {
         if ($row) {
-            $this->id = $row['id'];
+            if (isset($row["insight_key"])) {
+                $this->id = $row["insight_key"];
+            } else {
+                $this->id = $row['id'];
+            }
             $this->instance_id = $row['instance_id'];
             $this->slug = $row['slug'];
             $this->prefix = $row['prefix'];

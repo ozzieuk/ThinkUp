@@ -92,4 +92,18 @@ interface InsightDAO {
      */
     public function updateInsight($slug, $instance_id, $date, $prefix, $text, $emphasis=Insight::EMPHASIS_LOW,
     $related_data=null);
+    /**
+     * Get a page of insights for all public users.
+     * @param int $page_count Number of insight baselines to return
+     * @param int $page_number Page number
+     * @return array Insights
+     */
+    public function getPublicInsights($page_count=10, $page_number=1);
+    /**
+     * Get a page of insights for all users, public and private.
+     * @param int $page_count
+     * @param int $page_number
+     * @return array Insights
+     */
+    public function getAllInstanceInsights($page_count=10, $page_number=1);
 }

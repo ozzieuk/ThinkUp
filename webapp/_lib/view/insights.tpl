@@ -1,3 +1,5 @@
+{include file="_header.tpl"}
+
     <div class="navbar">
       <div class="navbar-inner">
         <div class="container">
@@ -68,7 +70,7 @@
     <div class="span9">
         <div class="alert {if $i->emphasis eq '1'}alert-info{elseif $i->emphasis eq '2'}alert-success{elseif $i->emphasis eq '3'}alert-error{/if} {$i->emphasis} insight-item">
             <p>
-
+{$i->instance->network_username} {$i->instance->network|capitalize}<br>
     <!-- begin related_data_type attachment data -->
                 {if $i->related_data_type eq 'users'}
                     {include file="_insights.users.tpl"}
@@ -94,15 +96,16 @@
         <ul class="pager">
         {if $next_page}
           <li class="previous">
-            <a href="{$site_root_path}?{if $smarty.get.v}v={$smarty.get.v}&{/if}{if $smarty.get.u}u={$smarty.get.u}&{/if}{if $smarty.get.n}n={$smarty.get.n|urlencode}&{/if}page={$next_page}" id="next_page" class="pull-left btn btn-small"><i class="icon-arrow-left"></i> Older</a>
+            <a href="{$site_root_path}insights.php?{if $smarty.get.v}v={$smarty.get.v}&{/if}{if $smarty.get.u}u={$smarty.get.u}&{/if}{if $smarty.get.n}n={$smarty.get.n|urlencode}&{/if}page={$next_page}" id="next_page" class="pull-left btn btn-small"><i class="icon-arrow-left"></i> Older</a>
           </li>
         {/if}
         {if $last_page}
           <li class="next">
-            <a href="{$site_root_path}?{if $smarty.get.v}v={$smarty.get.v}&{/if}{if $smarty.get.u}u={$smarty.get.u}&{/if}{if $smarty.get.n}n={$smarty.get.n|urlencode}&{/if}page={$last_page}" id="last_page" class="pull-right btn btn-small">Newer <i class="icon-arrow-right"></i></a>
+            <a href="{$site_root_path}insights.php?{if $smarty.get.v}v={$smarty.get.v}&{/if}{if $smarty.get.u}u={$smarty.get.u}&{/if}{if $smarty.get.n}n={$smarty.get.n|urlencode}&{/if}page={$last_page}" id="last_page" class="pull-right btn btn-small">Newer <i class="icon-arrow-right"></i></a>
           </li>
         {/if}
         </ul>
 
     </div>
 </div>
+{include file="_footer.tpl"}

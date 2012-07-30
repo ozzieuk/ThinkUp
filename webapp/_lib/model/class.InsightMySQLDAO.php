@@ -150,4 +150,52 @@ class InsightMySQLDAO  extends PDODAO implements InsightDAO {
         $result = $this->getUpdateCount($ps);
         return ($result > 0);
     }
+
+    public function getPublicInsights($page_count=10, $page_number=1) {
+        return self::getInsightsForInstances($page_count=10, $page_number=1, $public_only = true);
+    }
+
+    public function getAllInstanceInsights($page_count=10, $page_number=1) {
+        return self::getInsightsForInstances($page_count=10, $page_number=1, $public_only = false);
+    }
+
+    private function getInsightsForInstances($page_count=10, $page_number=1, $public_only = true) {
+        $start_on_record = ($page_number - 1) * $page_count;
+        $q = "SELECT i.*, i.id as insight_key, su.* FROM #prefix#insights i ";
+        $q .= "INNER JOIN #prefix#instances su ON i.instance_id = su.id WHERE su.is_active = 1 ";
+        if ($public_only) {
+            $q .= "AND su.is_public = 1 ";
+        }
+        $q .= " AND i.text != '' ORDER BY date DESC, emphasis DESC, i.id DESC LIMIT :start_on_record, :limit;";
+        $vars = array(
+            ":start_on_record"=>(int)$start_on_record,
+            ":limit"=>(int)$page_count
+        );
+        if ($this->profiler_enabled) Profiler::setDAOMethod(__METHOD__);
+        $ps = $this->execute($q, $vars);
+        $rows = $this->getDataRowsAsArrays($ps, "Insight");
+        $insights = array();
+        foreach ($rows as $row) {
+            $insight = new Insight($row);
+            $insight->instance = new Instance($row);
+            $insights[] = $insight;
+        }
+        foreach ($insights as $insight) {
+            $insight->related_data = unserialize($insight->related_data);
+            if ($insight->related_data instanceof Post) {
+                $insight->related_data_type = "post";
+            } elseif (is_array($insight->related_data)) {
+                if ($insight->related_data[0] instanceof User) {
+                    $insight->related_data_type = "users";
+                } elseif ($insight->related_data[0] instanceof Post) {
+                    $insight->related_data_type = "posts";
+                } elseif (isset($insight->related_data['history'])) {
+                    $insight->related_data_type = "count_history";
+                }
+            }
+            //assume insight came at same time of day as now for relative day notation
+            $insight->date = $insight->date. " ".date('H').":".date('i');
+        }
+        return $insights;
+    }
 }

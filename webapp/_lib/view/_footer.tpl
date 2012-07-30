@@ -3,7 +3,7 @@
   {/if}
 
 
-{if $smarty.get.v eq "insights"}
+{if $enable_bootstrap}
 
 </div>
 
@@ -11,7 +11,7 @@
       <div class="container footer">
         <p class="pull-right"><a href="#">Back to top</a></p>
         <p><a href="http://thinkup.com/">ThinkUp</a> 2.0&#945; | <a href="http://thinkupapp.com/docs/">Documentation</a> | <a href="https://groups.google.com/forum/?fromgroups#!forum/thinkupapp">Mailing List</a> | <a href="http://twitter.com/thinkup">@thinkup</a></p>
-        <p>&copy; ThinkUp LLC 2012. It's nice to be nice.</p>
+        <p>&copy; ThinkUp LLC 2012. It is nice to be nice.</p>
 	  </div>
       </footer>
       
