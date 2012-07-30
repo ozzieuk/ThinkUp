@@ -43,8 +43,6 @@ class InsightStreamController extends ThinkUpController {
                     ///show all insights for all service users
                     $insights = $insight_dao->getAllInstanceInsights($page_count=10, $page);
                     $this->addToView('insights', $insights);
-                    $this->addToView('next_page', $page+1);
-                    $this->addToView('last_page', $page-1);
                 } else {
                     //show only service users owner owns
                 }
@@ -52,6 +50,10 @@ class InsightStreamController extends ThinkUpController {
                 //show just public service users in stream
                 $insights = $insight_dao->getPublicInsights($page_count=10, $page);
                 $this->addToView('insights', $insights);
+            }
+            if (isset($insights) && sizeof($insights) > 0) {
+                $this->addToView('next_page', $page+1);
+                $this->addToView('last_page', $page-1);
             }
         }
         return $this->generateView();
