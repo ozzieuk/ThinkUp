@@ -152,11 +152,11 @@ class InsightMySQLDAO  extends PDODAO implements InsightDAO {
     }
 
     public function getPublicInsights($page_count=10, $page_number=1) {
-        return self::getInsightsForInstances($page_count=10, $page_number=1, $public_only = true);
+        return self::getInsightsForInstances($page_count, $page_number, $public_only = true);
     }
 
     public function getAllInstanceInsights($page_count=10, $page_number=1) {
-        return self::getInsightsForInstances($page_count=10, $page_number=1, $public_only = false);
+        return self::getInsightsForInstances($page_count, $page_number, $public_only = false);
     }
 
     private function getInsightsForInstances($page_count=10, $page_number=1, $public_only = true) {

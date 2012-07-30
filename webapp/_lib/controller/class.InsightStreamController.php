@@ -37,12 +37,12 @@ class InsightStreamController extends ThinkUpController {
 
         if ($this->shouldRefreshCache() ) {
             $insight_dao = DAOFactory::getDAO('InsightDAO');
+            $page = (isset($_GET['page']) && is_numeric($_GET['page']))?$_GET['page']:1;
             if (Session::isLoggedIn()) {
                 if ($this->isAdmin()) {
                     ///show all insights for all service users
-                    $insights = $insight_dao->getAllInstanceInsights($page_count=10, $page_number=1);
+                    $insights = $insight_dao->getAllInstanceInsights($page_count=10, $page);
                     $this->addToView('insights', $insights);
-                    $page = (isset($_GET['page']) && is_numeric($_GET['page']))?$_GET['page']:1;
                     $this->addToView('next_page', $page+1);
                     $this->addToView('last_page', $page-1);
                 } else {
@@ -50,7 +50,7 @@ class InsightStreamController extends ThinkUpController {
                 }
             } else {
                 //show just public service users in stream
-                $insights = $insight_dao->getPublicInsights($page_count=10, $page_number=1);
+                $insights = $insight_dao->getPublicInsights($page_count=10, $page);
                 $this->addToView('insights', $insights);
             }
         }
