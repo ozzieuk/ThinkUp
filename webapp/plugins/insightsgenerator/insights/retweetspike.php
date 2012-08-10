@@ -33,7 +33,7 @@ class RetweetSpikeInsight extends InsightPluginParent implements InsightPlugin {
 
     public function generateInsight(Instance $instance, $last_week_of_posts, $number_days) {
         parent::generateInsight($instance, $last_week_of_posts, $number_days);
-        self::generateInsightBaselines($number_days);
+        self::generateInsightBaselines($instance, $number_days);
         $this->logger->logInfo("Begin generating insight", __METHOD__.','.__LINE__);
 
         $insight_baseline_dao = DAOFactory::getDAO('InsightBaselineDAO');
@@ -139,10 +139,11 @@ class RetweetSpikeInsight extends InsightPluginParent implements InsightPlugin {
     }
     /**
      * Calculate and store insight baselines for a specified number of days.
+     * @param Instance $instance
      * @param int $number_days Number of days to backfill
      * @return void
      */
-    private function generateInsightBaselines($number_days=3) {
+    private function generateInsightBaselines($instance, $number_days=3) {
         $post_dao = DAOFactory::getDAO('PostDAO');
         $insight_baseline_dao = DAOFactory::getDAO('InsightBaselineDAO');
 
