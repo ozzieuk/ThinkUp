@@ -1749,6 +1749,22 @@ class PostMySQLDAO extends PDODAO implements PostDAO  {
         if ($this->profiler_enabled) Profiler::setDAOMethod(__METHOD__);
         $ps = $this->execute($q, $vars);
         $result = $this->getDataRowAsArray($ps);
+        if (!isset($result["average_retweet_count"])) {
+            $q = "SELECT round(avg(retweet_count_api)) as average_retweet_count ";
+            $q .= "FROM #prefix#posts WHERE network=:network and author_username=:author_username ";
+            $q .= "AND in_reply_to_user_id IS null AND in_reply_to_post_id IS null AND in_retweet_of_post_id is null ";
+            $q .= "AND retweet_count_api > 0 ";
+            $q .= "AND pub_date >= DATE_SUB(:since, INTERVAL :last_x_days DAY);";
+            $vars = array(
+            ':author_username'=>$author_username,
+            ':network'=>$network,
+            ':last_x_days'=>(int)$last_x_days,
+            ':since'=>$since
+            );
+            if ($this->profiler_enabled) Profiler::setDAOMethod(__METHOD__);
+            $ps = $this->execute($q, $vars);
+            $result = $this->getDataRowAsArray($ps);
+        }
         return $result["average_retweet_count"];
     }
 }
